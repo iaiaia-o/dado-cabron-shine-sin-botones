@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>El Dado Cabrón — Shine Edition</title>
+  <meta name="description" content="Una partida en vivo para directivos: azar + estoicismo aplicado. Descubre tus palancas de brillo y baja el ruido.">
+  <meta property="og:title" content="El Dado Cabrón — Shine Edition">
+  <meta property="og:description" content="Jugar con lo que la vida te da (y te quita). Estoicismo práctico para decisiones con menos fricción.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/imgs/og-dado-shine.jpg">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      /* Paleta ejecutiva */
+      --ink:#151515;         /* carbón */
+      --bg:#f6f4ef;          /* hueso cálido base */
+      --frame:#e3ddd2;       /* marco tenue */
+
+      --gold:#c4a464;        /* oro latido */
+      --gold-1:#faf7f0;      /* fondo sutil oro */
+      --aqua:#2aa198;        /* aguamarina */
+      --aqua-1:#f1f7f6;      /* fondo sutil aqua */
+      --slate:#0f172a;       /* pizarra profunda */
+      --slate-1:#f2f3f6;     /* fondo sutil pizarra */
+      --bone:#f7f6f3;        /* hueso alterno */
+
+      /* Tipografía (ligeramente más pequeña) */
+      --fs-base: clamp(0.93rem, 1.2vw, 1rem);       /* ~15–16 px */
+      --fs-lead: clamp(1rem, 1.8vw, 1.12rem);
+      --fs-h1: clamp(2rem, 5vw, 3.2rem);
+      --fs-h2: clamp(1.35rem, 3vw, 2rem);
+
+      --radius: 20px;
+      --shadow: 0 30px 60px rgba(0,0,0,.12);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: var(--fs-base);
+      line-height:1.7;
+      background:var(--bg);
+      color:var(--ink);
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+    .container{max-width:1180px;margin:0 auto;padding:0 24px}
+
+    /* Header fijo */
+    .header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(120%) blur(10px);
+      background:rgba(246,244,239,.85); border-bottom:1px solid rgba(0,0,0,.06);}
+    .head-inner{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0;}
+    .brand{display:flex; gap:.6rem; align-items:center; min-width:0}
+    .brand img{width:28px; height:28px; object-fit:contain; border-radius:6px; flex:0 0 28px}
+    .brand h1{
+      font-family:"Playfair Display", serif; font-weight:500; letter-spacing:-.5px; margin:0;
+      font-size: clamp(1.1rem, 2vw, 1.4rem); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .brand small{font-size:.7rem; letter-spacing:.15em; text-transform:uppercase; color:#6b6b6b;}
+    nav .btn{white-space:nowrap}
+    .btn{
+      display:inline-block; padding:10px 16px; border:1px solid var(--ink); color:var(--ink); background:transparent;
+      font-size:.9rem; letter-spacing:.06em; text-decoration:none; transition:.25s ease; border-radius:12px;
+    }
+    .btn:hover{background:var(--ink); color:#fff; transform:translateY(-1px)}
+    .btn.primary{background:var(--ink); color:#fff; border-color:var(--ink);}
+    .btn.soft{
+      background:linear-gradient(#fff,#fff) padding-box,
+                 linear-gradient(90deg, var(--gold), var(--aqua)) border-box;
+      border:1px solid transparent; color:var(--ink);
+    }
+    .btn:focus{outline:2px solid var(--aqua); outline-offset:2px}
+
+    /* Hero */
+    .hero{position:relative; min-height:82svh; display:grid; place-items:center; padding:7rem 0 5rem; border-bottom:1px solid var(--frame); overflow:hidden;}
+    .field{position:absolute; filter:saturate(110%); mix-blend-mode:multiply; border-radius:28px; box-shadow:0 20px 60px rgba(0,0,0,.10); opacity:.9;}
+    .f1{background:linear-gradient(180deg, #0f172a, #3f3f46); width:36vw; height:44vw; left:-6vw; top:-10vw;}
+    .f2{background:linear-gradient(180deg, #e4d2a8, var(--gold)); width:28vw; height:24vw; right:4vw; top:10vw;}
+    .f3{background:linear-gradient(180deg, var(--aqua), #0f766e); width:22vw; height:28vw; right:18vw; bottom:-8vw; border-radius:40px;}
+    .glow{position:absolute; border-radius:50%; filter:blur(64px); opacity:.32; mix-blend-mode:soft-light;}
+    .g1{background:radial-gradient(closest-side, var(--gold) 40%, transparent 70%); width:34vw; height:34vw; left:12vw; top:20vh;}
+    .g2{background:radial-gradient(closest-side, var(--aqua) 40%, transparent 70%); width:26vw; height:26vw; right:8vw; top:16vh;}
+    .g3{background:radial-gradient(closest-side, #0f172a 40%, transparent 70%); width:24vw; height:24vw; right:22vw; bottom:8vh;}
+
+    .hero-inner{position:relative; z-index:2; text-align:center; max-width:840px; padding:28px 24px;
+      background:rgba(246,244,239,.62); backdrop-filter:blur(8px);
+      border:1px solid rgba(0,0,0,.06); border-radius:var(--radius);}
+    .logo{width:120px; height:auto; opacity:.95; margin:0 auto 10px; display:block;}
+    h2{font-family:"Playfair Display", serif; font-size:var(--fs-h1); letter-spacing:-.02em; margin:.2rem 0 .85rem;}
+    .lead{font-size:var(--fs-lead); color:#333; max-width:62ch; margin:0 auto .9rem;}
+    .tag{display:inline-block; margin-bottom:8px; font-size:.75rem; letter-spacing:.14em; text-transform:uppercase; color:var(--aqua);}
+    .hero-cta{margin-top:.8rem; display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap}
+
+    /* Secciones con tonos */
+    section.block{padding:4.8rem 0; position:relative; border-bottom:1px solid var(--frame);}
+    .tone-bone{background:var(--bone);}
+    .tone-gold{background:var(--gold-1);}
+    .tone-aqua{background:var(--aqua-1);}
+    .tone-slate{background:var(--slate-1);}
+    .color-bar{
+      height:12px; width:100%; border-radius:10px; margin:0 0 26px;
+      background:linear-gradient(90deg, var(--gold) 0 35%, var(--aqua) 35% 70%, #0f172a 70% 100%);
+      box-shadow:var(--shadow); outline:1px solid rgba(0,0,0,.06);
+    }
+    .section-title{font-family:"Playfair Display", serif; font-size:var(--fs-h2); letter-spacing:-.02em; margin:0 0 .8rem;}
+    .section-desc{max-width:72ch; color:#424242; margin:0 0 1.6rem;}
+
+    /* Grids y listas */
+    .grid-2{display:grid; grid-template-columns:1.15fr .85fr; gap:44px; align-items:start;}
+    .list{list-style:none; padding:0; margin:0;}
+    .list li{padding-left:22px; position:relative; margin:8px 0 10px; color:#444;}
+    .list li::before{content:''; position:absolute; left:0; top:.65em; width:12px; height:12px; border-radius:3px;
+      background:linear-gradient(90deg, var(--gold), var(--aqua)); opacity:.95;}
+
+    /* Cards */
+    .cards{display:grid; grid-template-columns:repeat(2,1fr); gap:22px; max-width:980px; margin:14px auto 0;}
+    .card{background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:16px; padding:22px 20px;
+      box-shadow:0 10px 24px rgba(0,0,0,.06); transition:.25s ease; min-height:120px;}
+    .card:hover{transform:translateY(-3px); box-shadow:0 16px 30px rgba(0,0,0,.10)}
+    .card strong{display:block; font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; margin-bottom:6px; color:#222}
+    .card p{margin:0; color:#555}
+
+    /* Triptych (iconos más grandes) */
+    .triptych{display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin:20px 0 8px;}
+    .tile{background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:16px; padding:22px; text-align:center; box-shadow:0 10px 24px rgba(0,0,0,.06);}
+    .icon{
+      width:88px; height:88px; margin:0 auto 10px; display:grid; place-items:center;
+      border:1px solid #ddd; border-radius:16px; background:#fafafa;
+    }
+    .tile svg{width:38px; height:38px}      /* ↑ tamaño icono */
+    .tile h4{margin:.15rem 0 .3rem; letter-spacing:.12em; text-transform:uppercase; font-size:.86rem}
+    .tile p{margin:0; color:#555; font-size:.93rem}
+
+    /* Mapa Shine (iconos más grandes) */
+    .shine-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-top:14px;}
+    .shine-item{background:#fff; border:1px solid rgba(0,0,0,.06); border-radius:14px; padding:14px 12px; box-shadow:0 8px 18px rgba(0,0,0,.06);}
+    .shine-top{display:flex; align-items:center; gap:10px; margin-bottom:6px;}
+    .shine-top strong{font-size:.76rem; letter-spacing:.12em; text-transform:uppercase;}
+    .shine-desc{margin:0; font-size:.9rem; color:#555;}
+    .sicon{
+      width:36px; height:36px; border-radius:10px; border:1px solid #e6e0d4; display:grid; place-items:center;
+      background:linear-gradient(0deg,#fff,#fff);
+    }
+    .sicon svg{stroke:#222; width:22px; height:22px}
+
+    /* Fire */
+    .fire{display:flex; gap:14px; align-items:center; justify-content:center; max-width:560px; margin:28px auto 0;
+      padding:18px; border:1px solid rgba(0,0,0,.06); border-radius:16px; background:#fff; box-shadow:0 10px 24px rgba(0,0,0,.06);}
+    .fire h5{margin:0 0 2px; letter-spacing:.12em; text-transform:uppercase; font-size:.8rem}
+    .fire p{margin:0; color:#555; font-size:.93rem}
+
+    /* Final */
+    .final{text-align:center; padding:5.2rem 0 6rem; position:relative; overflow:hidden;}
+    .final .poster{max-width:640px; margin:0 auto 20px; padding:22px 18px; background:#fff;
+      border:1px solid rgba(0,0,0,.06); border-radius:16px; box-shadow:0 14px 32px rgba(0,0,0,.10);}
+    .poster p{margin:.2rem 0; color:#333}
+    .poster p strong{font-weight:600}
+
+    /* Accesibilidad */
+    @media (prefers-reduced-motion:reduce){*, *::before, *::after{animation:none!important; transition:none!important} .glow, .field{display:none}}
+
+    /* Responsive robusto */
+    @media (max-width: 1080px){
+      .shine-grid{grid-template-columns:repeat(4,1fr)}
+    }
+    @media (max-width: 920px){
+      .container{padding:0 18px}
+      .hero{min-height:72svh; padding:6rem 0 4rem;}
+      .hero-inner{padding:22px}
+      .grid-2{grid-template-columns:1fr; gap:22px}
+      .cards{grid-template-columns:1fr}
+      .triptych{grid-template-columns:repeat(3,1fr)}
+    }
+    @media (max-width: 740px){
+      .brand h1{font-size:1.1rem}
+      .logo{width:100px}
+      .triptych{grid-template-columns:1fr 1fr}
+      .shine-grid{grid-template-columns:repeat(2,1fr)}
+      .icon{width:82px;height:82px;border-radius:14px}
+      .tile svg{width:34px;height:34px}
+    }
+    @media (max-width: 520px){
+      .head-inner{flex-wrap:wrap; justify-content:center; gap:8px}
+      nav .btn{padding:9px 14px}
+      .hero-cta{flex-direction:column}
+      .triptych{grid-template-columns:1fr}
+      .shine-grid{grid-template-columns:1fr}
+      .icon{width:78px;height:78px;border-radius:12px}
+      .tile svg{width:32px;height:32px}
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header" aria-label="Barra de navegación">
+    <div class="container head-inner">
+      <div class="brand">
+        <img src="logo-dado.png" alt="Logo El Dado Cabrón">
+        <h1>El Dado Cabrón</h1>
+        <small>shine edition</small>
+      </div>
+     
+  </header>
+
+  <!-- HERO -->
+  <section class="hero tone-bone" aria-labelledby="t-hero">
+    <div class="field f1" aria-hidden="true"></div>
+    <div class="field f2" aria-hidden="true"></div>
+    <div class="field f3" aria-hidden="true"></div>
+    <div class="glow g1" aria-hidden="true"></div>
+    <div class="glow g2" aria-hidden="true"></div>
+    <div class="glow g3" aria-hidden="true"></div>
+
+    <div class="container hero-inner">
+      <img class="logo" src="logo-dado.png" alt="Logotipo El Dado Cabrón" />
+      <div class="tag">Filosofía · Estrategia · Presencia</div>
+      <h2 id="t-hero">Shine Edition</h2>
+      <p class="lead">
+        Un encuentro para inquit@s en el que el azar se convierte en foco, la pausa en ventaja
+        competitiva y cada tirada revela la palanca que te permite brillar sin ruido. Una meditación sonriente para serenarte.
+      </p>
+      <div class="hero-cta">
+        
+        <a class="btn soft" href="#shine">Ver Mapa Shine</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LISTO / VALOR -->
+  <section class="block tone-gold" id="listo" aria-labelledby="t-listo">
+    <div class="container">
+      <div class="color-bar" aria-hidden="true"></div>
+      <h3 class="section-title" id="t-listo">¿Listo para jugar en serio?</h3>
+      <p class="section-desc">
+        No es el parchís de tu infancia. Es un entrenamiento de lucidez: decisiones con menos fricción,
+        más serenidad y dirección estratégica.
+      </p>
+      <div class="grid-2">
+        <div>
+          <p>
+            Aquí cada tirada es un <em>movimiento consciente</em> y cada bloqueo, una invitación a ver el tablero entero.
+           Saldrás con lenguaje inspirador, marcos de decisión y un recordatorio práctico: <strong>lo esencial no grita</strong>.
+          </p>
+        </div>
+        <div>
+          <h4 class="section-title" style="font-size:1rem; margin-bottom:.5rem">Te llevas</h4>
+          <ul class="list">
+            <li>Un Mapa Shine aplicable el lunes en tu primera reunión de trabajo.</li>
+            <li>Hábitos micro-estoicos para dirigir sin drama.</li>
+            <li>Rituales breves de foco y energía.</li>
+            <li>Marco de juego para tu vitalidad.</li>
+            <li>Una forma de meditar en medio del ruido.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTIDA -->
+  <section class="block tone-aqua" id="partida" aria-labelledby="t-partida">
+    <div class="container">
+      <div class="color-bar" aria-hidden="true"></div>
+      <h3 class="section-title" id="t-partida">La Partida: tablero de decisiones</h3>
+      <p class="section-desc">El tablero está vivo. Las fichas son de todos. Y tu turno es dirección, no empuje ciego.</p>
+      <div class="cards">
+        <article class="card">
+          <strong>Mirada amplia</strong>
+          <p>En tu turno puedes mover cualquier ficha. Practicas desapego, lectura de contexto y criterio.</p>
+        </article>
+        <article class="card">
+          <strong>Refugios activos</strong>
+          <p>Casillas que activan el “dado de pausa”: reajustan el juego de forma inesperada.</p>
+        </article>
+        <article class="card">
+          <strong>Economía simbólica</strong>
+          <p>Cada jugada tiene coste y retorno. Como en la agenda y en tu energía.</p>
+        </article>
+        <article class="card">
+          <strong>Botín y memoria</strong>
+          <p>Se puede ganar el bote, sí. Pero lo vivido es el activo que permanece.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCIA -->
+  <section class="block tone-slate" id="experiencia" aria-labelledby="t-experiencia">
+    <div class="container">
+      <div class="color-bar" aria-hidden="true"></div>
+      <h3 class="section-title" id="t-experiencia">La experiencia</h3>
+      <p class="section-desc">Juego serio, humor limpio y respiración consciente para bajar el ruido y subir la claridad.</p>
+
+      <div class="triptych" role="list">
+        <div class="tile" role="listitem">
+          <div class="icon" aria-hidden="true">
+            <!-- icono tablero -->
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+              <path d="M3 9h18M9 3v18"></path>
+            </svg>
+          </div>
+          <h4>Context Board</h4>
+          <p>Ver el conjunto antes de mover. Contexto primero, impulso después.</p>
+        </div>
+        <div class="tile" role="listitem">
+          <div class="icon" aria-hidden="true">
+            <!-- icono skin light -->
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5" aria-hidden="true">
+              <path d="M4 12c4-6 12-6 16 0" />
+              <path d="M6 15c3-3 9-3 12 0" />
+            </svg>
+          </div>
+          <h4>Skin Light</h4>
+          <p>Ligereza y cuidado: liberar tensión para recuperar energía creativa.</p>
+        </div>
+        <div class="tile" role="listitem">
+          <div class="icon" aria-hidden="true">
+            <!-- icono respirar -->
+            <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5" aria-hidden="true">
+              <path d="M3 12h6M15 12h6M12 3v6M12 15v6" />
+              <circle cx="12" cy="12" r="2.2" />
+            </svg>
+          </div>
+          <h4>Breathe Turn</h4>
+          <p>Tu turno puede ser tirar… o respirar. Elegir sigue siendo mover.</p>
+        </div>
+      </div>
+
+      <div class="fire" aria-label="Módulo Fuego compartido">
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5">
+            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+          </svg>
+        </div>
+        <div>
+          <h5>Fire · Shine</h5>
+          <p>Cuando el juego se enciende, también se enciende tu claridad: foco y dirección.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAPA SHINE -->
+  <section class="block tone-bone" id="shine" aria-labelledby="t-shine">
+    <div class="container">
+      <div class="color-bar" aria-hidden="true"></div>
+      <h3 class="section-title" id="t-shine">Mapa Shine — 10 palancas para brillar</h3>
+      <p class="section-desc">Estoicismo aplicado al liderazgo: del control a la influencia, del ruido a lo esencial.</p>
+
+      <div class="shine-grid">
+        <!-- 1 -->
+        <div class="shine-item">
+          <div class="shine-top">
+            <span class="sicon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M4 12h8M12 12l4 4M12 12l4-4"/>
+              </svg>
+            </span>
+            <strong>Influencia</strong>
+          </div>
+          <p class="shine-desc">Mover donde tienes impacto real. Elegir causa y proteger energía.</p>
+        </div>
+        <!-- 2 -->
+        <div class="shine-item">
+          <div class="shine-top">
+            <span class="sicon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <circle cx="12" cy="12" r="8"/><path d="M9 13s1.5 1.5 3 1.5S15 13 15 13"/>
+              </svg>
+            </span>
+            <strong>Autocompasión</strong>
+          </div>
+          <p class="shine-desc">Responder con impecabilidad sin dureza contigo ni con otros.</p>
+        </div>
+        <!-- 3 -->
+        <div class="shine-item">
+          <div class="shine-top">
+            <span class="sicon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/>
+              </svg>
+            </span>
+            <strong>Pausa útil</strong>
+          </div>
+          <p class="shine-desc">Espacio para escuchar y reajustar: cuidar para cuidar.</p>
+        </div>
+        <!-- 4 -->
+        <div class="shine-item">
+          <div class="shine-top">
+            <span class="sicon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M3 17l6-6 4 4 8-8"/>
+              </svg>
+            </span>
+            <strong>Aprender/educar</strong>
+          </div>
+          <p class="shine-desc">Transformar fricción en avance y en cultura del equipo.</p>
+        </div>
+        <!-- 5 -->
+        <div class="shine-item">
+          <div class="shine-top">
+            <span class="sicon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="15" r="1.2"/>
+              </svg>
+            </span>
+            <strong>Adaptabilidad</strong>
+          </div>
+          <p class="shine-desc">Aceptar lo inesperado como maestro que expande la mente.</p>
+        </div>
+        <!-- 6 -->
+        <div class="shine-item">
+          <div class="shine-top">
+            <span class="sicon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M4 12h16M12 4v16"/><circle cx="12" cy="12" r="9"/>
+              </svg>
+            </span>
+            <strong>Claridad</strong>
+          </div>
+          <p class="shine-desc">Decidir desde mente expandida y autoconsciente.</p>
+        </div>
+        <!-- 7 -->
+        <div class="shine-item">
+          <div class="shine-top">
+            <span class="sicon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M6 20l6-16 6 16M8 14h8"/>
+              </svg>
+            </span>
+            <strong>Impecabilidad</strong>
+          </div>
+          <p class="shine-desc">Ética, respeto y belleza como catalizadores de confianza.</p>
+        </div>
+        <!-- 8 -->
+        <div class="shine-item">
+          <div class="shine-top">
+            <span class="sicon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M12 2v6M12 16v6M2 12h6M16 12h6"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </span>
+            <strong>Presencia</strong>
+          </div>
+          <p class="shine-desc">Propósito claro que alinea dirección y silencia ego.</p>
+        </div>
+        <!-- 9 -->
+        <div class="shine-item">
+          <div class="shine-top">
+            <span class="sicon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M4 12h10"/><circle cx="18" cy="12" r="2"/>
+              </svg>
+            </span>
+            <strong>Esencialismo</strong>
+          </div>
+          <p class="shine-desc">Impacto silencioso: menos ruido, más profundidad.</p>
+        </div>
+        <!-- 10 -->
+        <div class="shine-item">
+          <div class="shine-top">
+            <span class="sicon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M8 11h8v6H8z"/><path d="M12 7v4"/>
+              </svg>
+            </span>
+            <strong>Juego</strong>
+          </div>
+          <p class="shine-desc">Cuidar el espíritu lúdico para sostener creatividad y vínculo.</p>
+        </div>
+     </section>
+
+  <!-- CONVOCATORIA -->
+  <section class="final tone-gold" id="reserva" aria-labelledby="t-reserva">
+    <div class="container">
+      <h3 class="section-title" id="t-reserva">Tu turno ha llegado</h3>
+      <p class="section-desc" style="margin:0 auto 1rem; text-align:center">
+        El Dado Cabrón abre <em>Shine Edition</em>. Un entrenamiento exclusivo, breve y transformador.
+      </p>
+
+      <div class="poster" role="group" aria-label="Datos del evento">
+        <p><strong>Fecha:</strong> 25 de septiembre</p>
+        <p><strong>Hora:</strong> 16:00 (120 min)</p>
+        <p><strong>Ciudad:</strong> Segovia <em>(detalles de ubicación y participación en email respuesta a inscritxs)</em></p>
+        <p><strong>Plazas:</strong> 16 almas juguetonas </p>
+      </div>
+
+      <div class="hero-cta" style="margin-top:.5rem">
+        
+        <a class="btn" href="#listo">Volver arriba</a>
+      </div>
+
+      <textarea id="mensajeReserva" aria-hidden="true" style="position:absolute; left:-9999px; top:-9999px;"></textarea>
+      <p id="fallbackMsg" style="margin-top:1rem; color:#444; display:none">
+        Si tu correo no se abrió, hemos <strong>copiado el mensaje</strong> al portapapeles. Envíalo manualmente a
+        <strong>2012creadores@gmail.com</strong> con asunto <em>Inscripción Shine Edition - El Dado Cabrón</em>.
+      </p>
+    </div>
+  </section>
+
+  <script>
+    // Smooth scroll (soporta anclas #)
+    document.addEventListener('click', (e)=>{
+      const a = e.target.closest('a[href^="#"]');
+      if(!a) return;
+      const target = document.querySelector(a.getAttribute('href'));
+      if(target){
+        e.preventDefault();
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+
+    // Mailto + fallback copiar
+    function mensajeInscripcion(){
+      const now = new Date();
+      const fecha = now.toLocaleDateString('es-ES');
+      const hora = now.toLocaleTimeString('es-ES');
+      return `Hola,
+
+Me gustaría inscribirme en "El Dado Cabrón - Shine Edition" (25 de septiembre, 19:00, Segovia).
+
+Datos de la solicitud:
+- Fecha de inscripción: ${fecha}
+- Hora de inscripción: ${hora}
+- Evento: Shine Edition
+- Ciudad: Segovia
+- Fecha del evento: 25 de septiembre
+- Hora del evento: 19:00
+- Duración: 120 minutos
+
+Por favor, confirmad mi plaza (formato 16 personas) y compartid la ubicación.
+
+Gracias,
+Un futuro participante`;
+    }
+
+    function abrirMailto(){
+      const subject = 'Inscripción Shine Edition - El Dado Cabrón';
+      const body = encodeURIComponent(mensajeInscripcion());
+      const mailto = `mailto:2012creadores@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+      window.location.href = mailto;
+
+      // Fallback copiar al portapapeles
+      const txt = document.getElementById('mensajeReserva');
+      txt.value = mensajeInscripcion();
+      txt.select();
+      try{
+        document.execCommand('copy');
+        document.getElementById('fallbackMsg').style.display = 'block';
+      }catch(err){}
+    }
+
+    document.getElementById('ctaReserva').addEventListener('click', (e)=>{
+      e.preventDefault();
+      abrirMailto();
+    });
+  </script>
+</body>
+</html>
