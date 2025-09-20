@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>El Dado Cabrón — Shine Edition</title>
-  <meta name="description" content="Una partida en vivo para directivos: azar + estoicismo aplicado. Descubre tus palancas de brillo y baja el ruido.">
+  <meta name="description" content="Una partida en vivo para directiv@s: azar + estoicismo aplicado. Descubre tus palancas de brillo y baja el ruido.">
   <meta property="og:title" content="El Dado Cabrón — Shine Edition">
-  <meta property="og:description" content="Jugar con lo que la vida te da (y te quita). Estoicismo práctico para decisiones con menos fricción.">
+  <meta property="og:description" content="Jugar con lo que la vida te da (y te quita). Estoicismo práctico para decisiones más brillantes.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="/imgs/og-dado-shine.jpg">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,20 +14,20 @@
   <style>
     :root{
       /* Paleta ejecutiva */
-      --ink:#151515;         /* carbón */
-      --bg:#f6f4ef;          /* hueso cálido base */
-      --frame:#e3ddd2;       /* marco tenue */
+      --ink:#151515;       /* carbón */
+      --bg:#f6f4ef;       /* hueso cálido base */
+      --frame:#e3ddd2;     /* marco tenue */
 
-      --gold:#c4a464;        /* oro latido */
-      --gold-1:#faf7f0;      /* fondo sutil oro */
-      --aqua:#2aa198;        /* aguamarina */
-      --aqua-1:#f1f7f6;      /* fondo sutil aqua */
-      --slate:#0f172a;       /* pizarra profunda */
+      --gold:#c4a464;       /* oro latido */
+      --gold-1:#faf7f0;     /* fondo sutil oro */
+      --aqua:#2aa198;       /* aguamarina */
+      --aqua-1:#f1f7f6;     /* fondo sutil aqua */
+      --slate:#0f172a;      /* pizarra profunda */
       --slate-1:#f2f3f6;     /* fondo sutil pizarra */
-      --bone:#f7f6f3;        /* hueso alterno */
+      --bone:#f7f6f3;       /* hueso alterno */
 
       /* Tipografía (ligeramente más pequeña) */
-      --fs-base: clamp(0.93rem, 1.2vw, 1rem);       /* ~15–16 px */
+      --fs-base: clamp(0.93rem, 1.2vw, 1rem);      /* ~15–16 px */
       --fs-lead: clamp(1rem, 1.8vw, 1.12rem);
       --fs-h1: clamp(2rem, 5vw, 3.2rem);
       --fs-h2: clamp(1.35rem, 3vw, 2rem);
@@ -76,7 +76,7 @@
     .btn:focus{outline:2px solid var(--aqua); outline-offset:2px}
 
     /* Hero */
-    .hero{position:relative; min-height:82svh; display:grid; place-items:center; padding:7rem 0 5rem; border-bottom:1px solid var(--frame); overflow:hidden;}
+    .hero{position:relative; min-height:auto; display:grid; place-items:center; padding:5rem 0 5rem; border-bottom:1px solid var(--frame); overflow:hidden;}
     .field{position:absolute; filter:saturate(110%); mix-blend-mode:multiply; border-radius:28px; box-shadow:0 20px 60px rgba(0,0,0,.10); opacity:.9;}
     .f1{background:linear-gradient(180deg, #0f172a, #3f3f46); width:36vw; height:44vw; left:-6vw; top:-10vw;}
     .f2{background:linear-gradient(180deg, #e4d2a8, var(--gold)); width:28vw; height:24vw; right:4vw; top:10vw;}
@@ -160,6 +160,51 @@
     .poster p{margin:.2rem 0; color:#333}
     .poster p strong{font-weight:600}
 
+    /* --- INICIO: ESTILOS PARA SECCIÓN DE VÍDEO --- */
+    .video-section {
+      padding: 3rem 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--frame);
+    }
+    .video-container {
+      position: relative; /* Needed for the button positioning */
+      max-width: 500px;  /* Match the site's container width */
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .video-wrapper {
+      position: relative;
+      border-radius: var(--radius); /* Use existing variable */
+      overflow: hidden;
+      box-shadow: var(--shadow); /* Use existing variable */
+      border: 1px solid var(--frame);
+    }
+    .video-wrapper video {
+      width: 100%;
+      height: auto;
+      display: block; /* Removes bottom space under the video */
+    }
+    .sound-toggle {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      z-index: 5;
+      background-color: rgba(21, 21, 21, 0.6);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, .4);
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: .25s ease;
+      backdrop-filter: blur(4px);
+    }
+    .sound-toggle:hover {
+      background-color: rgba(21, 21, 21, 0.8);
+      border-color: white;
+    }
+    /* --- FIN: ESTILOS PARA SECCIÓN DE VÍDEO --- */
+
     /* Accesibilidad */
     @media (prefers-reduced-motion:reduce){*, *::before, *::after{animation:none!important; transition:none!important} .glow, .field{display:none}}
 
@@ -168,8 +213,8 @@
       .shine-grid{grid-template-columns:repeat(4,1fr)}
     }
     @media (max-width: 920px){
-      .container{padding:0 18px}
-      .hero{min-height:72svh; padding:6rem 0 4rem;}
+      .container, .video-container {padding:0 18px} /* Ajuste para el vídeo */
+      .hero{min-height:auto; padding:4rem 0 4rem;}
       .hero-inner{padding:22px}
       .grid-2{grid-template-columns:1fr; gap:22px}
       .cards{grid-template-columns:1fr}
@@ -203,10 +248,27 @@
         <h1>El Dado Cabrón</h1>
         <small>shine edition</small>
       </div>
-     
+    </div>
   </header>
 
-  <!-- HERO -->
+  <section class="video-section">
+    <div class="video-container">
+      <div class="video-wrapper">
+        <video
+            id="mainVideo"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="auto"
+        >
+            <source src="filosofo-dado-cabron.mp4" type="video/mp4">
+            Tu navegador no soporta el elemento de video.
+        </video>
+        <button id="soundButton" class="sound-toggle">Activar Sonido</button>
+      </div>
+    </div>
+  </section>
   <section class="hero tone-bone" aria-labelledby="t-hero">
     <div class="field f1" aria-hidden="true"></div>
     <div class="field f2" aria-hidden="true"></div>
@@ -224,13 +286,11 @@
         competitiva y cada tirada revela la palanca que te permite brillar sin ruido. Una meditación sonriente para serenarte.
       </p>
       <div class="hero-cta">
-        
         <a class="btn soft" href="#shine">Ver Mapa Shine</a>
       </div>
     </div>
   </section>
 
-  <!-- LISTO / VALOR -->
   <section class="block tone-gold" id="listo" aria-labelledby="t-listo">
     <div class="container">
       <div class="color-bar" aria-hidden="true"></div>
@@ -243,7 +303,7 @@
         <div>
           <p>
             Aquí cada tirada es un <em>movimiento consciente</em> y cada bloqueo, una invitación a ver el tablero entero.
-           Saldrás con lenguaje inspirador, marcos de decisión y un recordatorio práctico: <strong>lo esencial no grita</strong>.
+            Saldrás con lenguaje inspirador, marcos de decisión y un recordatorio práctico: <strong>lo esencial no grita</strong>.
           </p>
         </div>
         <div>
@@ -260,7 +320,6 @@
     </div>
   </section>
 
-  <!-- PARTIDA -->
   <section class="block tone-aqua" id="partida" aria-labelledby="t-partida">
     <div class="container">
       <div class="color-bar" aria-hidden="true"></div>
@@ -287,7 +346,6 @@
     </div>
   </section>
 
-  <!-- EXPERIENCIA -->
   <section class="block tone-slate" id="experiencia" aria-labelledby="t-experiencia">
     <div class="container">
       <div class="color-bar" aria-hidden="true"></div>
@@ -297,7 +355,6 @@
       <div class="triptych" role="list">
         <div class="tile" role="listitem">
           <div class="icon" aria-hidden="true">
-            <!-- icono tablero -->
             <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5" aria-hidden="true">
               <rect x="3" y="3" width="18" height="18" rx="2"></rect>
               <path d="M3 9h18M9 3v18"></path>
@@ -308,7 +365,6 @@
         </div>
         <div class="tile" role="listitem">
           <div class="icon" aria-hidden="true">
-            <!-- icono skin light -->
             <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5" aria-hidden="true">
               <path d="M4 12c4-6 12-6 16 0" />
               <path d="M6 15c3-3 9-3 12 0" />
@@ -319,7 +375,6 @@
         </div>
         <div class="tile" role="listitem">
           <div class="icon" aria-hidden="true">
-            <!-- icono respirar -->
             <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.5" aria-hidden="true">
               <path d="M3 12h6M15 12h6M12 3v6M12 15v6" />
               <circle cx="12" cy="12" r="2.2" />
@@ -344,7 +399,6 @@
     </div>
   </section>
 
-  <!-- MAPA SHINE -->
   <section class="block tone-bone" id="shine" aria-labelledby="t-shine">
     <div class="container">
       <div class="color-bar" aria-hidden="true"></div>
@@ -352,7 +406,6 @@
       <p class="section-desc">Estoicismo aplicado al liderazgo: del control a la influencia, del ruido a lo esencial.</p>
 
       <div class="shine-grid">
-        <!-- 1 -->
         <div class="shine-item">
           <div class="shine-top">
             <span class="sicon">
@@ -364,7 +417,6 @@
           </div>
           <p class="shine-desc">Mover donde tienes impacto real. Elegir causa y proteger energía.</p>
         </div>
-        <!-- 2 -->
         <div class="shine-item">
           <div class="shine-top">
             <span class="sicon">
@@ -376,7 +428,6 @@
           </div>
           <p class="shine-desc">Responder con impecabilidad sin dureza contigo ni con otros.</p>
         </div>
-        <!-- 3 -->
         <div class="shine-item">
           <div class="shine-top">
             <span class="sicon">
@@ -388,7 +439,6 @@
           </div>
           <p class="shine-desc">Espacio para escuchar y reajustar: cuidar para cuidar.</p>
         </div>
-        <!-- 4 -->
         <div class="shine-item">
           <div class="shine-top">
             <span class="sicon">
@@ -400,7 +450,6 @@
           </div>
           <p class="shine-desc">Transformar fricción en avance y en cultura del equipo.</p>
         </div>
-        <!-- 5 -->
         <div class="shine-item">
           <div class="shine-top">
             <span class="sicon">
@@ -412,7 +461,6 @@
           </div>
           <p class="shine-desc">Aceptar lo inesperado como maestro que expande la mente.</p>
         </div>
-        <!-- 6 -->
         <div class="shine-item">
           <div class="shine-top">
             <span class="sicon">
@@ -424,7 +472,6 @@
           </div>
           <p class="shine-desc">Decidir desde mente expandida y autoconsciente.</p>
         </div>
-        <!-- 7 -->
         <div class="shine-item">
           <div class="shine-top">
             <span class="sicon">
@@ -436,7 +483,6 @@
           </div>
           <p class="shine-desc">Ética, respeto y belleza como catalizadores de confianza.</p>
         </div>
-        <!-- 8 -->
         <div class="shine-item">
           <div class="shine-top">
             <span class="sicon">
@@ -448,7 +494,6 @@
           </div>
           <p class="shine-desc">Propósito claro que alinea dirección y silencia ego.</p>
         </div>
-        <!-- 9 -->
         <div class="shine-item">
           <div class="shine-top">
             <span class="sicon">
@@ -460,7 +505,6 @@
           </div>
           <p class="shine-desc">Impacto silencioso: menos ruido, más profundidad.</p>
         </div>
-        <!-- 10 -->
         <div class="shine-item">
           <div class="shine-top">
             <span class="sicon">
@@ -474,7 +518,6 @@
         </div>
      </section>
 
-  <!-- CONVOCATORIA -->
   <section class="final tone-gold" id="reserva" aria-labelledby="t-reserva">
     <div class="container">
       <h3 class="section-title" id="t-reserva">Tu turno ha llegado</h3>
@@ -490,7 +533,7 @@
       </div>
 
       <div class="hero-cta" style="margin-top:.5rem">
-        
+        <a id="ctaReserva" class="btn primary" href="#">Inscribirme</a>
         <a class="btn" href="#listo">Volver arriba</a>
       </div>
 
@@ -503,6 +546,25 @@
   </section>
 
   <script>
+    // --- INICIO: SCRIPT PARA EL VÍDEO ---
+    document.addEventListener('DOMContentLoaded', function() {
+        const video = document.getElementById('mainVideo');
+        const soundButton = document.getElementById('soundButton');
+
+        if (video && soundButton) {
+            soundButton.addEventListener('click', function() {
+                if (video.muted) {
+                    video.muted = false;
+                    soundButton.textContent = 'Silenciar';
+                } else {
+                    video.muted = true;
+                    soundButton.textContent = 'Activar Sonido';
+                }
+            });
+        }
+    });
+    // --- FIN: SCRIPT PARA EL VÍDEO ---
+
     // Smooth scroll (soporta anclas #)
     document.addEventListener('click', (e)=>{
       const a = e.target.closest('a[href^="#"]');
@@ -553,11 +615,14 @@ Un futuro participante`;
         document.getElementById('fallbackMsg').style.display = 'block';
       }catch(err){}
     }
-
-    document.getElementById('ctaReserva').addEventListener('click', (e)=>{
-      e.preventDefault();
-      abrirMailto();
-    });
+    
+    const ctaReservaButton = document.getElementById('ctaReserva');
+    if (ctaReservaButton) {
+        ctaReservaButton.addEventListener('click', (e)=>{
+          e.preventDefault();
+          abrirMailto();
+        });
+    }
   </script>
 </body>
 </html>
